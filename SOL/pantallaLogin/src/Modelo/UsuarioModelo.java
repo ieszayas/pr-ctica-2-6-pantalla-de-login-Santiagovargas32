@@ -4,7 +4,12 @@
  */
 package Modelo;
 
-import java.util.ArrayList;
+import Modelo.entradaSalida.ConexionBD;
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -12,19 +17,48 @@ import java.util.ArrayList;
  */
 public class UsuarioModelo {
 
-    private static ArrayList<Usuario> usuarios = new ArrayList<>();
+    public static Usuario verificarCredenciales(String username, String password) throws SQLException {
+        Connection con = ConexionBD.getConexion();
+        String sql = "SELECT * FROM usuarios WHERE username = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
 
-    static {
-        usuarios.add(new Usuario("javier", "1234"));
-        usuarios.add(new Usuario("admin", "admin"));
-    }
+        if (rs.next()) {
+            String hashedPassword = rs.getString("password");
 
-    public static Usuario verificarCredenciales(String nombre, String password) {
-        for (Usuario u : usuarios) {
-            if (u.getNombre().equals(nombre) && u.getPassword().equals(password)) {
-                return u;
+            // Verificación de la contraseña
+            BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), hashedPassword);
+
+            // Si la contraseña es válida, retornamos un objeto Usuario
+            if (result.verified) {
+                // Suponiendo que tienes una clase Usuario que recibe estos campos
+                Usuario user = new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("nombre"),
+                        rs.getString("apellidos"),
+                        rs.getDate("fecha_nacimiento"),
+                        rs.getString("correo")
+                );
+                return user;
             }
         }
-        return null;  // Retorna null si no coincide
+        return null; // Retorna null si no coincide el username o la contraseña
+    }
+
+    public static boolean agregarUsuario(String username, String password) throws SQLException {
+        Connection con = ConexionBD.getConexion();
+        String sql = "INSERT INTO usuarios (username, password) VALUES (?, ?)";
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        // Encriptar la contraseña
+        String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());  // 12 es el costo (factor de trabajo)
+
+        ps.setString(1, username);
+        ps.setString(2, hashedPassword);
+
+        int rowsInserted = ps.executeUpdate();
+        return rowsInserted > 0;
     }
 }

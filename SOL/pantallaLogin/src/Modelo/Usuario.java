@@ -4,6 +4,8 @@
  */
 package Modelo;
 
+import java.util.Date;
+
 /**
  *
  * @author Santiago
@@ -12,6 +14,21 @@ public class Usuario {
 
     private String nombre;
     private String password;
+    private int id;
+    private String username;
+    private String apellidos;
+    private Date fechaNacimiento;
+    private String correo;
+
+    // Constructor, getters y setters
+    public Usuario(int id, String username, String nombre, String apellidos, Date fechaNacimiento, String correo) {
+        this.id = id;
+        this.username = username;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.fechaNacimiento = fechaNacimiento;
+        this.correo = correo;
+    }
 
     public Usuario(String nombre, String password) {
         this.nombre = nombre;
