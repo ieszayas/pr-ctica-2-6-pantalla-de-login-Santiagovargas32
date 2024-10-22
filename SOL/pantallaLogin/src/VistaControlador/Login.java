@@ -24,6 +24,11 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
+        try {
+            Modelo.entradaSalida.ConexionBD.crearBaseDeDatosSiNoExiste();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al crear la base de datos: " + ex.getMessage());
+        }
     }
 
     /**
@@ -146,28 +151,48 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLoguearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoguearActionPerformed
         // TODO add your handling code here:
+        String username = campoUsuario.getText();
+        String password = new String(campoContrasena.getPassword());
 
-        btnLoguear.addActionListener(e -> {
-            try {
-                String usuario = campoUsuario.getText();
-                String password = new String(campoContrasena.getPassword());
-
-                Usuario user = UsuarioModelo.verificarCredenciales(usuario, password);
-
-                if (user != null) {
-                    // Credenciales correctas, abre la nueva ventana
-                    Principal principalFrame = new Principal(user);  // Pasa el objeto Usuario
-                    principalFrame.setVisible(true);
-                    this.dispose();  // Cierra la ventana de login actual
-                } else {
-                    // Credenciales incorrectas, muestra un mensaje de error
-                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error de Login", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+        try {
+            Usuario user = UsuarioModelo.verificarCredenciales(username, password);
+            
+            if (user != null) {
+                // Abre la ventana principal si el login es correcto
+                Principal ventanaPrincipal = new Principal(user);
+                ventanaPrincipal.setVisible(true);
+                this.dispose(); // Cierra la ventana de login
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
             }
-        });
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al verificar las credenciales: " + ex.getMessage());
+            System.out.println(ex.getMessage());
+        }
+
+//        btnLoguear.addActionListener(e -> {
+//            try {
+//                String usuario = campoUsuario.getText();
+//                String password = new String(campoContrasena.getPassword());
+//
+//                Usuario user = UsuarioModelo.verificarCredenciales(usuario, password);
+//
+//                if (user != null) {
+//                    // Credenciales correctas, abre la nueva ventana
+//                    System.out.println(user);
+//                    Principal principalFrame = new Principal(user);  // Pasa el objeto Usuario
+//                    System.out.println(user);
+//                    principalFrame.setVisible(true);
+//                    this.dispose();  // Cierra la ventana de login actual
+//                } else {
+//                    // Credenciales incorrectas, muestra un mensaje de error
+//                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error de Login", JOptionPane.ERROR_MESSAGE);
+//                }
+//            } catch (SQLException ex) {
+//                ex.printStackTrace();
+//                JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+//            }
+//        });
 
     }//GEN-LAST:event_btnLoguearActionPerformed
 

@@ -17,7 +17,8 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal(Usuario usuario) {
         initComponents();
-        lblMensaje.setText("El usuario " + usuario.getNombre() + " está logueado");
+        System.out.println(usuario);
+        lblMensaje.setText("El usuario " + usuario.getUsername() + " está logueado");
         setLocationRelativeTo(null);
     }
 

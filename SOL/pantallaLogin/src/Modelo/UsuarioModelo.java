@@ -25,14 +25,11 @@ public class UsuarioModelo {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            String hashedPassword = rs.getString("password");
+            String storedPassword = rs.getString("password");
 
-            // Verificación de la contraseña
-            BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), hashedPassword);
-
-            // Si la contraseña es válida, retornamos un objeto Usuario
-            if (result.verified) {
-                // Suponiendo que tienes una clase Usuario que recibe estos campos
+            // Verificación de la contraseña (comparación directa, sin encriptación)
+            if (password.equals(storedPassword)) {
+                // Retornamos el objeto Usuario
                 Usuario user = new Usuario(
                         rs.getInt("id"),
                         rs.getString("username"),
@@ -52,13 +49,53 @@ public class UsuarioModelo {
         String sql = "INSERT INTO usuarios (username, password) VALUES (?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
 
-        // Encriptar la contraseña
-        String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());  // 12 es el costo (factor de trabajo)
-
+        // No encriptamos la contraseña
         ps.setString(1, username);
-        ps.setString(2, hashedPassword);
+        ps.setString(2, password);
 
         int rowsInserted = ps.executeUpdate();
         return rowsInserted > 0;
     }
+
+    public static void agregarNuevoUsuario(String username, String password, String nombre, String apellido, String fechaNacimiento, String correo) throws SQLException {
+        String query = "INSERT INTO usuarios (username, password, nombre, apellidos, fecha_nacimiento, correo) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = ConexionBD.getConexion(); PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, username);
+            ps.setString(2, password); // Asegúrate de cifrar la contraseña
+            ps.setString(3, (nombre.isEmpty() ? null : nombre)); // Si está vacío, insertar NULL
+            ps.setString(4, (apellido.isEmpty() ? null : apellido));
+            ps.setDate(5, (fechaNacimiento.isEmpty() ? null : java.sql.Date.valueOf(fechaNacimiento))); // Convertir a SQL DATE
+            ps.setString(6, (correo.isEmpty() ? null : correo));
+
+            ps.executeUpdate();
+        }
+    }
+
+    public static boolean existeUsuario(String username) throws SQLException {
+        String query = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
+        try (PreparedStatement stmt = Modelo.entradaSalida.ConexionBD.getConexion().prepareStatement(query)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;  // Retorna true si el usuario existe
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void actualizarDatosOpcionales(String username, String nombre, String apellido, String fechaNacimiento, String correo) throws SQLException {
+        String query = "UPDATE usuarios SET nombre = ?, apellido = ?, fecha_nacimiento = ?, correo = ? WHERE username = ?";
+        try (PreparedStatement stmt = Modelo.entradaSalida.ConexionBD.getConexion().prepareStatement(query)) {
+            stmt.setString(1, nombre);
+            stmt.setString(2, apellido);
+            stmt.setString(3, fechaNacimiento);  // Convertir a formato de fecha adecuado si es necesario
+            stmt.setString(4, correo);
+            stmt.setString(5, username);
+            stmt.executeUpdate();
+        }
+    }
+
 }

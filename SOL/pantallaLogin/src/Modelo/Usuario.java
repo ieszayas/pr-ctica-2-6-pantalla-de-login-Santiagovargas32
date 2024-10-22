@@ -42,4 +42,17 @@ public class Usuario {
     public String getPassword() {
         return password;
     }
+
+    public String getUsername() {
+        return username;
+    }
+    
+    
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "nombre=" + nombre + ", password=" + password + ", id=" + id + ", username=" + username + ", apellidos=" + apellidos + ", fechaNacimiento=" + fechaNacimiento + ", correo=" + correo + '}';
+    }
+    
+    
 }

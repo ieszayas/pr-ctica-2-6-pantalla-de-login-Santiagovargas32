@@ -7,6 +7,9 @@ package VistaControlador;
 import Modelo.UsuarioModelo;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -19,6 +22,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
      */
     public RegistroUsuario() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -41,10 +45,10 @@ public class RegistroUsuario extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
+        txtApellido = new javax.swing.JTextField();
+        txtFechaNacimiento = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
         btnVolver = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
@@ -71,19 +75,24 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
         jLabel9.setText("Correo");
 
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                txtNombreActionPerformed(evt);
             }
         });
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                txtCorreoActionPerformed(evt);
             }
         });
 
         btnVolver.setText("volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         btnAgregar.setText("agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -107,10 +116,10 @@ public class RegistroUsuario extends javax.swing.JFrame {
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
+                            .addComponent(txtApellido, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,19 +179,19 @@ public class RegistroUsuario extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
@@ -193,37 +202,74 @@ public class RegistroUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_txtCorreoActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
-
         String username = txtUsername.getText();
         String password = new String(txtPassword.getPassword());
         String confirmPassword = new String(txtPasswordRR.getPassword());
 
-        if (password.equals(confirmPassword)) {
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre de usuario y la contraseña son obligatorios.");
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.");
+            return;
+        }
+
+        String nombre = txtNombre.getText();
+        String apellido = txtApellido.getText();
+        String fechaNacimiento = txtFechaNacimiento.getText();  // Se debe convertir a DATE
+        String correo = txtCorreo.getText();
+        if (!fechaNacimiento.isEmpty()) {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+            formatoFecha.setLenient(false);  // Asegura que la fecha sea estrictamente válida
             try {
-                if (UsuarioModelo.agregarUsuario(username, password)) {
-                    JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente");
-                    this.dispose();  // Cierra la ventana de registro
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al registrar usuario");
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
+                // Intenta convertir la fecha
+                Date fecha = formatoFecha.parse(fechaNacimiento);
+            } catch (ParseException e) {
+                JOptionPane.showMessageDialog(this, "La fecha de nacimiento no tiene un formato válido. Use dd/MM/yyyy.");
+                return;
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden");
+        }
+
+        try {
+            boolean usuarioExiste = Modelo.UsuarioModelo.existeUsuario(username);
+
+            if (usuarioExiste) {
+                // Si el usuario ya existe, actualizar los datos opcionales
+                Modelo.UsuarioModelo.actualizarDatosOpcionales(username, nombre, apellido, fechaNacimiento, correo);
+                JOptionPane.showMessageDialog(this, "Datos opcionales actualizados exitosamente.");
+            } else {
+                // Si el usuario no existe, crearlo con los datos ingresados
+                Modelo.UsuarioModelo.agregarNuevoUsuario(username, password, nombre, apellido, fechaNacimiento, correo);
+                JOptionPane.showMessageDialog(this, "Usuario creado exitosamente.");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al agregar/actualizar el usuario: " + ex.getMessage());
         }
 
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+
+        // Muestra la ventana de login nuevamente
+        Login loginFrame = new Login();
+        loginFrame.setVisible(true);
+
+
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,10 +319,10 @@ public class RegistroUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField txtApellido;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextField txtFechaNacimiento;
+    private javax.swing.JTextField txtNombre;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JPasswordField txtPasswordRR;
     private javax.swing.JTextField txtUsername;
