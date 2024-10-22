@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,16 +58,23 @@ public class UsuarioModelo {
         return rowsInserted > 0;
     }
 
-    public static void agregarNuevoUsuario(String username, String password, String nombre, String apellido, String fechaNacimiento, String correo) throws SQLException {
+    public static void agregarNuevoUsuario(String username, String password, String nombre, String apellido, java.sql.Date fechaNacimiento, String correo) throws SQLException {
         String query = "INSERT INTO usuarios (username, password, nombre, apellidos, fecha_nacimiento, correo) VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (Connection con = ConexionBD.getConexion(); PreparedStatement ps = con.prepareStatement(query)) {
-
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
+        Connection con = ConexionBD.getConexion(); 
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next() && rs.getInt(1) > 0) {
+            JOptionPane.showMessageDialog(null, "El usuario ya existe.");
+            return;
+        }
+        try (PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, username);
             ps.setString(2, password); // Asegúrate de cifrar la contraseña
             ps.setString(3, (nombre.isEmpty() ? null : nombre)); // Si está vacío, insertar NULL
             ps.setString(4, (apellido.isEmpty() ? null : apellido));
-            ps.setDate(5, (fechaNacimiento.isEmpty() ? null : java.sql.Date.valueOf(fechaNacimiento))); // Convertir a SQL DATE
+            ps.setDate(5, fechaNacimiento); // Inserta directamente como java.sql.Date
             ps.setString(6, (correo.isEmpty() ? null : correo));
 
             ps.executeUpdate();
@@ -86,13 +94,18 @@ public class UsuarioModelo {
         return false;
     }
 
-    public static void actualizarDatosOpcionales(String username, String nombre, String apellido, String fechaNacimiento, String correo) throws SQLException {
-        String query = "UPDATE usuarios SET nombre = ?, apellido = ?, fecha_nacimiento = ?, correo = ? WHERE username = ?";
-        try (PreparedStatement stmt = Modelo.entradaSalida.ConexionBD.getConexion().prepareStatement(query)) {
-            stmt.setString(1, nombre);
-            stmt.setString(2, apellido);
-            stmt.setString(3, fechaNacimiento);  // Convertir a formato de fecha adecuado si es necesario
-            stmt.setString(4, correo);
+    public static void actualizarDatosOpcionales(String username, String nombre, String apellido, java.sql.Date fechaNacimiento, String correo) throws SQLException {
+        String query = "UPDATE usuarios SET nombre = ?, apellidos = ?, fecha_nacimiento = ?, correo = ? WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
+        Connection con = ConexionBD.getConexion(); 
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            stmt.setString(1, (nombre.isEmpty() ? null : nombre));
+            stmt.setString(2, (apellido.isEmpty() ? null : apellido));
+            stmt.setDate(3, fechaNacimiento); // Inserta directamente como java.sql.Date
+            stmt.setString(4, (correo.isEmpty() ? null : correo));
             stmt.setString(5, username);
             stmt.executeUpdate();
         }

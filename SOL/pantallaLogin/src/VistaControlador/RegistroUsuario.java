@@ -10,6 +10,10 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.toedter.calendar.JDateChooser;
+import java.awt.Dimension;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -17,12 +21,18 @@ import java.util.Date;
  */
 public class RegistroUsuario extends javax.swing.JFrame {
 
+    private JDateChooser dateChooser;
+
     /**
      * Creates new form RegistroUsuario
      */
     public RegistroUsuario() {
         initComponents();
         setLocationRelativeTo(null);
+
+        dateChooser = new JDateChooser();
+        dateChooser.setBounds(270, 410, 150, 30); // Ajusta la posición
+        add(dateChooser);
     }
 
     /**
@@ -43,16 +53,15 @@ public class RegistroUsuario extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         txtApellido = new javax.swing.JTextField();
-        txtFechaNacimiento = new javax.swing.JTextField();
         txtCorreo = new javax.swing.JTextField();
         btnVolver = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
         txtPasswordRR = new javax.swing.JPasswordField();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro Usuario");
@@ -71,13 +80,17 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
         jLabel7.setText("Apellido");
 
-        jLabel8.setText("Fecha Nacimiento");
-
         jLabel9.setText("Correo");
 
         txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombreActionPerformed(evt);
+            }
+        });
+
+        txtApellido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtApellidoActionPerformed(evt);
             }
         });
 
@@ -101,35 +114,12 @@ public class RegistroUsuario extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setText("Fecha Nacimiento");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(83, 83, 83)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtApellido, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnVolver)
-                                .addGap(104, 104, 104)
-                                .addComponent(btnAgregar))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -154,6 +144,31 @@ public class RegistroUsuario extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jSeparator1)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(83, 83, 83)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtApellido, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnVolver)
+                                .addGap(104, 104, 104)
+                                .addComponent(btnAgregar))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,14 +200,12 @@ public class RegistroUsuario extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
                     .addComponent(btnAgregar))
@@ -204,54 +217,71 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
     private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
         // TODO add your handling code here:
+        if (txtCorreo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El campo opcional no puede estar vacío.");
+            return; // Salir del método si hay error
+        }
+
+        // Verificar si el correo está bien formado
+        String correo = txtCorreo.getText();
+        if (!isEmailValid(correo)) {
+            JOptionPane.showMessageDialog(null, "El correo electrónico no está bien formado.");
+            return; // Salir del método si hay error
+        }
     }//GEN-LAST:event_txtCorreoActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
+        if (txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El campo opcional no puede estar vacío.");
+            return; // Salir del método si hay error
+        }
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
+
         String username = txtUsername.getText();
         String password = new String(txtPassword.getPassword());
         String confirmPassword = new String(txtPasswordRR.getPassword());
 
+        // Validación de campos obligatorios
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre de usuario y la contraseña son obligatorios.");
             return;
         }
 
+        // Verificar que las contraseñas coincidan
         if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.");
             return;
         }
 
+        // Obtener datos opcionales
         String nombre = txtNombre.getText();
         String apellido = txtApellido.getText();
-        String fechaNacimiento = txtFechaNacimiento.getText();  // Se debe convertir a DATE
-        String correo = txtCorreo.getText();
-        if (!fechaNacimiento.isEmpty()) {
-            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-            formatoFecha.setLenient(false);  // Asegura que la fecha sea estrictamente válida
-            try {
-                // Intenta convertir la fecha
-                Date fecha = formatoFecha.parse(fechaNacimiento);
-            } catch (ParseException e) {
-                JOptionPane.showMessageDialog(this, "La fecha de nacimiento no tiene un formato válido. Use dd/MM/yyyy.");
-                return;
-            }
+        Date fechaNacimiento = dateChooser.getDate();  // Obtenemos la fecha como java.util.Date
+
+        // Validación de la fecha de nacimiento
+        if (fechaNacimiento == null) {
+            JOptionPane.showMessageDialog(this, "La fecha de nacimiento es obligatoria.");
+            return;
         }
+
+        // Convertir java.util.Date a java.sql.Date
+        java.sql.Date sqlFechaNacimiento = new java.sql.Date(fechaNacimiento.getTime());
+        String correo = txtCorreo.getText();
 
         try {
             boolean usuarioExiste = Modelo.UsuarioModelo.existeUsuario(username);
 
             if (usuarioExiste) {
                 // Si el usuario ya existe, actualizar los datos opcionales
-                Modelo.UsuarioModelo.actualizarDatosOpcionales(username, nombre, apellido, fechaNacimiento, correo);
+                Modelo.UsuarioModelo.actualizarDatosOpcionales(username, nombre, apellido, sqlFechaNacimiento, correo);
                 JOptionPane.showMessageDialog(this, "Datos opcionales actualizados exitosamente.");
             } else {
                 // Si el usuario no existe, crearlo con los datos ingresados
-                Modelo.UsuarioModelo.agregarNuevoUsuario(username, password, nombre, apellido, fechaNacimiento, correo);
+                Modelo.UsuarioModelo.agregarNuevoUsuario(username, password, nombre, apellido, sqlFechaNacimiento, correo);
                 JOptionPane.showMessageDialog(this, "Usuario creado exitosamente.");
             }
         } catch (SQLException ex) {
@@ -270,6 +300,14 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void txtApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidoActionPerformed
+        // TODO add your handling code here:
+        if (txtApellido.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El campo opcional no puede estar vacío.");
+            return; // Salir del método si hay error
+        }
+    }//GEN-LAST:event_txtApellidoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -306,6 +344,11 @@ public class RegistroUsuario extends javax.swing.JFrame {
         });
     }
 
+    private boolean isEmailValid(String email) {
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        return email.matches(emailRegex);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnVolver;
@@ -321,7 +364,6 @@ public class RegistroUsuario extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtCorreo;
-    private javax.swing.JTextField txtFechaNacimiento;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JPasswordField txtPasswordRR;

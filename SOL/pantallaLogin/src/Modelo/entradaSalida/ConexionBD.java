@@ -4,11 +4,16 @@
  */
 package Modelo.entradaSalida;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  *
@@ -16,22 +21,36 @@ import java.sql.SQLException;
  */
 public class ConexionBD {
 
-    private static final String URL = "jdbc:mysql://localhost:3306";
-    private static final String USER = "root";  
-    private static final String PASSWORD = "";  
     private static Connection conexion;
 
     public static Connection getConexion() throws SQLException {
         if (conexion == null || conexion.isClosed()) {
             try {
-                conexion = DriverManager.getConnection(URL, USER, PASSWORD);
+                Properties properties = new Properties();
+                // Cargar el archivo de propiedades
+                try (InputStream input = ConexionBD.class.getResourceAsStream("/config.properties")) {
+                    if (input == null) {
+                        throw new IOException("No se pudo encontrar el archivo de configuración.");
+                    }
+                    properties.load(input);
+                }
+
+                // Leer las propiedades
+                String url = properties.getProperty("db.url");
+                String user = properties.getProperty("db.user");
+                String password = properties.getProperty("db.password");
+
+                // Establecer la conexión
+                conexion = DriverManager.getConnection(url, user, password);
+            } catch (IOException e) {
+                throw new SQLException("Error al cargar la configuración de la base de datos.", e.getMessage());
             } catch (SQLException e) {
-                throw new SQLException("Error de conexión con la base de datos.", e);
+                throw new SQLException("Error de conexión con la base de datos.", e.getMessage());
             }
         }
         return conexion;
     }
-    
+
     public static void crearBaseDeDatosSiNoExiste() throws SQLException {
         Connection con = ConexionBD.getConexion();
 
