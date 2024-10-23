@@ -268,9 +268,31 @@ public class RegistroUsuario extends javax.swing.JFrame {
             return;
         }
 
+        if (txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre es obligatorio");
+            return;
+        }
+
+        if (txtApellido.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El apellido es obligatorio");
+            return;
+        }
+
+        if (txtCorreo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El campo opcional no puede estar vacío.");
+            return; // Salir del método si hay error
+        }
+
+        // Verificar si el correo está bien formado
+        String correo = txtCorreo.getText();
+        if (!isEmailValid(correo)) {
+            JOptionPane.showMessageDialog(null, "El correo electrónico no está bien formado.");
+            return; // Salir del método si hay error
+        }
+
         // Convertir java.util.Date a java.sql.Date
         java.sql.Date sqlFechaNacimiento = new java.sql.Date(fechaNacimiento.getTime());
-        String correo = txtCorreo.getText();
+        
 
         try {
             boolean usuarioExiste = Modelo.UsuarioModelo.existeUsuario(username);
