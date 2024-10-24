@@ -153,10 +153,10 @@ public class Login extends javax.swing.JFrame {
 
         try {
             Usuario user = UsuarioModelo.verificarCredenciales(username, password);
-            user.setUsuarioLogueado(user);
-            
+
             if (user != null) {
                 // Abre la ventana principal si el login es correcto
+                user.setUsuarioLogueado(user);
                 Principal ventanaPrincipal = new Principal(user);
                 ventanaPrincipal.setVisible(true);
                 this.dispose(); // Cierra la ventana de login

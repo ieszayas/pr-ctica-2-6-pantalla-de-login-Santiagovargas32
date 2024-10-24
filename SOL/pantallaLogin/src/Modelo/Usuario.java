@@ -5,6 +5,7 @@
 package Modelo;
 
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,8 +25,9 @@ public class Usuario {
 
     public void setUsuarioLogueado(Usuario usuario) {
         UsuarioLogueado = usuario;
+        
     }
-    
+
     public static Usuario getUsuarioLogueado() {
         return UsuarioLogueado;
     }
