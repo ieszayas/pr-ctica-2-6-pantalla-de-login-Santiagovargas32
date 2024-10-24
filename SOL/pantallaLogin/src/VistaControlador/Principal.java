@@ -5,6 +5,8 @@
 package VistaControlador;
 
 import Modelo.Usuario;
+import javax.swing.JOptionPane;
+import java.sql.SQLException;
 
 /**
  *
@@ -39,6 +41,7 @@ public class Principal extends javax.swing.JFrame {
         btnCerrar = new javax.swing.JButton();
         lblMensaje = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        btnCambiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Principal");
@@ -62,6 +65,13 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Modelo/user.png"))); // NOI18N
 
+        btnCambiar.setText("Cambiar Contraseña");
+        btnCambiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,8 +89,12 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(95, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(146, 146, 146)
+                .addGap(143, 143, 143)
                 .addComponent(btnCerrar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(127, 127, 127)
+                .addComponent(btnCambiar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -94,7 +108,9 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCerrar)
-                .addGap(33, 33, 33))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCambiar)
+                .addGap(4, 4, 4))
         );
 
         pack();
@@ -114,6 +130,46 @@ public class Principal extends javax.swing.JFrame {
         this.dispose();  // Cierra la ventana actual
 
     }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
+        // TODO add your handling code here:
+        String contrasenaActual = JOptionPane.showInputDialog(this, "Ingresa tu contraseña actual:", "Cambiar Contraseña", JOptionPane.PLAIN_MESSAGE);
+
+        // Si el usuario cancela o deja el campo vacío, salir
+        if (contrasenaActual == null || contrasenaActual.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Operación cancelada o campo vacío.");
+            return;
+        }
+
+        // Pedir la nueva contraseña
+        String nuevaContrasena = JOptionPane.showInputDialog(this, "Ingresa tu nueva contraseña:", "Cambiar Contraseña", JOptionPane.PLAIN_MESSAGE);
+
+        // Si el usuario cancela o deja el campo vacío, salir
+        if (nuevaContrasena == null || nuevaContrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Operación cancelada o campo vacío.");
+            return;
+        }
+
+        try {
+            // Obtener el usuario actual desde el constructor
+            Usuario usuario = Usuario.getUsuarioLogueado(); // Asumimos que tienes un método que devuelve el usuario actual
+
+            // Verificar si la contraseña actual es correcta
+            boolean contrasenaCorrecta = Modelo.UsuarioModelo.verificarContrasena(usuario.getUsername(), contrasenaActual);
+
+            if (!contrasenaCorrecta) {
+                JOptionPane.showMessageDialog(this, "La contraseña actual no es correcta.");
+                return;
+            }
+
+            // Cambiar la contraseña
+            Modelo.UsuarioModelo.cambiarContrasena(usuario.getUsername(), nuevaContrasena);
+            JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito.");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cambiar la contraseña: " + ex.getMessage());
+        }
+
+    }//GEN-LAST:event_btnCambiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,6 +207,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCambiar;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

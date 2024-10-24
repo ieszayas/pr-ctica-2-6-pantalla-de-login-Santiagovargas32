@@ -6,9 +6,6 @@ package VistaControlador;
 
 import Modelo.Usuario;
 import Modelo.UsuarioModelo;
-import java.awt.Point;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 
@@ -156,6 +153,7 @@ public class Login extends javax.swing.JFrame {
 
         try {
             Usuario user = UsuarioModelo.verificarCredenciales(username, password);
+            user.setUsuarioLogueado(user);
             
             if (user != null) {
                 // Abre la ventana principal si el login es correcto

@@ -20,6 +20,16 @@ public class Usuario {
     private Date fechaNacimiento;
     private String correo;
 
+    private static Usuario UsuarioLogueado;
+
+    public void setUsuarioLogueado(Usuario usuario) {
+        UsuarioLogueado = usuario;
+    }
+    
+    public static Usuario getUsuarioLogueado() {
+        return UsuarioLogueado;
+    }
+
     // Constructor, getters y setters
     public Usuario(int id, String username, String nombre, String apellidos, Date fechaNacimiento, String correo) {
         this.id = id;
@@ -46,13 +56,10 @@ public class Usuario {
     public String getUsername() {
         return username;
     }
-    
-    
 
     @Override
     public String toString() {
         return "Usuario{" + "nombre=" + nombre + ", password=" + password + ", id=" + id + ", username=" + username + ", apellidos=" + apellidos + ", fechaNacimiento=" + fechaNacimiento + ", correo=" + correo + '}';
     }
-    
-    
+
 }

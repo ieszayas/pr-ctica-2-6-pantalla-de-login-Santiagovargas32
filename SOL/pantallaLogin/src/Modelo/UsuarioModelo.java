@@ -5,7 +5,6 @@
 package Modelo;
 
 import Modelo.entradaSalida.ConexionBD;
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,7 +60,7 @@ public class UsuarioModelo {
     public static void agregarNuevoUsuario(String username, String password, String nombre, String apellido, java.sql.Date fechaNacimiento, String correo) throws SQLException {
         String query = "INSERT INTO usuarios (username, password, nombre, apellidos, fecha_nacimiento, correo) VALUES (?, ?, ?, ?, ?, ?)";
         String sql = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
-        Connection con = ConexionBD.getConexion(); 
+        Connection con = ConexionBD.getConexion();
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setString(1, username);
         ResultSet rs = stmt.executeQuery();
@@ -97,7 +96,7 @@ public class UsuarioModelo {
     public static void actualizarDatosOpcionales(String username, String nombre, String apellido, java.sql.Date fechaNacimiento, String correo) throws SQLException {
         String query = "UPDATE usuarios SET nombre = ?, apellidos = ?, fecha_nacimiento = ?, correo = ? WHERE username = ?";
         String sql = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
-        Connection con = ConexionBD.getConexion(); 
+        Connection con = ConexionBD.getConexion();
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setString(1, username);
         ResultSet rs = stmt.executeQuery();
@@ -108,6 +107,30 @@ public class UsuarioModelo {
             stmt.setString(4, (correo.isEmpty() ? null : correo));
             stmt.setString(5, username);
             stmt.executeUpdate();
+        }
+    }
+
+    public static boolean verificarContrasena(String username, String contrasena) throws SQLException {
+        String query = "SELECT password FROM usuarios WHERE username = ?";
+        Connection con = ConexionBD.getConexion();
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String storedPassword = rs.getString("password");
+                    return storedPassword.equals(contrasena); // Compara contraseñas (añade encriptación si es necesario)
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void cambiarContrasena(String username, String nuevaContrasena) throws SQLException {
+        String query = "UPDATE usuarios SET password = ? WHERE username = ?";
+        try (Connection con = ConexionBD.getConexion(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, nuevaContrasena);  // Aquí puedes encriptar la contraseña si es necesario
+            ps.setString(2, username);
+            ps.executeUpdate();
         }
     }
 

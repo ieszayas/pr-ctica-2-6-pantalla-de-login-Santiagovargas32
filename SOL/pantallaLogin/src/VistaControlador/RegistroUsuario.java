@@ -4,16 +4,10 @@
  */
 package VistaControlador;
 
-import Modelo.UsuarioModelo;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.toedter.calendar.JDateChooser;
-import java.awt.Dimension;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
