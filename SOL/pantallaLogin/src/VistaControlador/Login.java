@@ -6,8 +6,11 @@ package VistaControlador;
 
 import Modelo.Usuario;
 import Modelo.UsuarioModelo;
+import java.awt.Point;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -161,7 +164,24 @@ public class Login extends javax.swing.JFrame {
                 ventanaPrincipal.setVisible(true);
                 this.dispose(); // Cierra la ventana de login
             } else {
-                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
+                Point point = this.getLocation();
+                for (int i = 0; i < 10; i++) {
+                    this.setLocation(point.x + 5, point.y);
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    this.setLocation(point.x - 5, point.y);
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                this.setLocation(point);
+
+                JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al verificar las credenciales: " + ex.getMessage());
