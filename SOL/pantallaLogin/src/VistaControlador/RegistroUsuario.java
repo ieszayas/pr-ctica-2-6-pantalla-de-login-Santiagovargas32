@@ -286,15 +286,13 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
         // Convertir java.util.Date a java.sql.Date
         java.sql.Date sqlFechaNacimiento = new java.sql.Date(fechaNacimiento.getTime());
-        
 
         try {
             boolean usuarioExiste = Modelo.UsuarioModelo.existeUsuario(username);
 
             if (usuarioExiste) {
-                // Si el usuario ya existe, actualizar los datos opcionales
-                Modelo.UsuarioModelo.actualizarDatosOpcionales(username, nombre, apellido, sqlFechaNacimiento, correo);
-                JOptionPane.showMessageDialog(this, "Datos opcionales actualizados exitosamente.");
+                // Si el usuario ya existe, mostrar un mensaje de advertencia
+                JOptionPane.showMessageDialog(this, "El usuario ya existe. Por favor, elige otro nombre de usuario.");
             } else {
                 // Si el usuario no existe, crearlo con los datos ingresados
                 Modelo.UsuarioModelo.agregarNuevoUsuario(username, password, nombre, apellido, sqlFechaNacimiento, correo);
